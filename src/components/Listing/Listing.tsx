@@ -1,9 +1,14 @@
 import React from 'react'
 import './Listing.css'
+import { IItem } from '../../types'
 
-export default function Listing(props) {
+interface IListingProps {
+  items: IItem[]
+}
+
+export default function Listing(props: IListingProps) {
   
-  const {items} = props;  
+  const { items } = props;  
   const itemsFilter = items.filter( item => item.title);
   const itemsData = itemsFilter.map( item =>     
       (
@@ -14,7 +19,7 @@ export default function Listing(props) {
             </a>
           </div>
           <div className='item-details'>
-            <p className='item-title'>{truncateString(item.title,50)}</p>          
+            <p className='item-title'>{item.title && truncateString(item.title,50)}</p>          
             
             { item.currency_code === 'USD' 
               ? <p className='item-price'>${item.price}</p>
@@ -23,11 +28,11 @@ export default function Listing(props) {
                   ? <p className='item-price'>€{item.price}</p>
                   : <p className='item-price'>{item.price} {item.currency_code}</p>
                )            
-            }
-            { item.quantity <= 10
+            }            
+            { item.quantity && item.quantity <= 10
               ? <p className='item-quantity level-low'>{item.quantity}</p>
               : 
-              (item.quantity <= 20
+              (item.quantity && item.quantity <= 20
                 ? <p className='item-quantity level-medium'>{item.quantity}</p>
                 : <p className='item-quantity level-high'>{item.quantity}</p>
               )
@@ -45,6 +50,6 @@ export default function Listing(props) {
 
 }
 
-function truncateString(str, maxlength) {
+function truncateString(str: string, maxlength: number) {
   return (str.length >= maxlength) ? str.slice(0, maxlength-1)+'...' : str;
 }
